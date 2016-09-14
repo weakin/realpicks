@@ -4,7 +4,9 @@
   "description": "An NFL Game Picking app, re-written in react",
   "main": "index.js",
   "scripts": {
-    "lint": "standard src/**/*.js | snazzy",
+    "build": "webpack",
+    "start": "webpack-dev-server --progress --inline --hot",
+    "lint": "standard src/**/*.jsx src/**/*.js | snazzy",
     "test": "babel-tape-runner __tests__/**/*.test.js | faucet"
   },
   "keywords": [
@@ -43,6 +45,7 @@
     "snazzy": "^5.0.0",
     "standard": "^8.0.0",
     "tape": "^4.6.0",
+    "uglifyjs": "^2.4.10",
     "webpack": "^1.13.2",
     "webpack-dev-server": "^1.15.2"
   }
