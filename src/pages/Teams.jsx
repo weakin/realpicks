@@ -1,16 +1,24 @@
 import React from 'react'
 import ajax from 'superagent'
-import { IndexLink, Link } from 'react-router'
+import {Link} from 'react-router'
 
 class Teams extends React.Component {
   constructor (props) {
     super(props)
 
     this.state = { teams: [] }
+
+    this.fetchTeamsInfo = this.fetchTeamsInfo.bind(this)
+    this.showTeams = this.showTeams.bind(this)
   }
 
   componentWillMount () {
-    ajax.get('assets/php/get_teams.php')
+    this.fetchTeamsInfo()
+  }
+
+  fetchTeamsInfo () {
+    let baseURL = 'assets/php/get_teams.php'
+    ajax.get(`${baseURL}`)
       .end((error, response) => {
         if (!error && response) {
           this.setState({ teams: response.body })
@@ -23,20 +31,18 @@ class Teams extends React.Component {
 
   showTeams () {
     return this.state.teams.map((team, index) => {
-      return (<p key={index} className='teamName'>
-                <Link to={`/team/${team}`}>
-                {team}
-                </Link>
-              </p>)
+      return (
+        <p key={index} className='teamName'>
+          <Link to={`/teams/${team}`}>{team}</Link>
+        </p>
+      )
     })
   }
 
   render () {
     let content
     content = this.showTeams()
-    return <div>
-             {content}
-           </div>
+    return <div className='teams'>{content}</div>
   }
 }
 
