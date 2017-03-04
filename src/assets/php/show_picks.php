@@ -13,7 +13,7 @@ $requestedWeek = getWeek($_GET['week']);
 $userGroup = validateFormStringInput($_GET['group']);
 $requestedWeekKey = 'week_' . $requestedWeek[0];
 
-$getPicks = 'SELECT nfl_season.id, nfl_season.home_team, nfl_season.away_team, nfl_season.winning_team, nfl_season.losing_team, nfl_season.winning_score, nfl_season.losing_score, nfl_season.game_day_of_week, nfl_season.game_date, nfl_picks.pick, nfl_picks.user_name FROM nfl_picks INNER JOIN nfl_season ON nfl_season.id = nfl_picks.game_id WHERE nfl_season.game_week = ' . $requestedWeek[0] . ' AND nfl_picks.user_group = \'' . $userGroup . '\' ORDER BY nfl_season.game_day_of_week, nfl_season.game_time DESC';
+$getPicks = 'SELECT nfl_season.id, nfl_season.home_team, nfl_season.away_team, nfl_season.winning_team, nfl_season.losing_team, nfl_season.winning_score, nfl_season.losing_score, nfl_season.game_day_of_week, nfl_season.game_date, nfl_picks.pick, nfl_picks.user_name, nfl_weeks.game_week_alias FROM nfl_picks JOIN nfl_season ON nfl_season.id = nfl_picks.game_id JOIN nfl_weeks ON nfl_season.game_week = nfl_weeks.game_week WHERE nfl_season.game_week = ' . $requestedWeek[0] . ' AND nfl_picks.user_group = \'' . $userGroup . '\' ORDER BY nfl_season.game_day_of_week, nfl_season.game_time DESC';
 
 $picksResult = pg_query($getPicks) or die('Query failed: ' . pg_last_error());
 
@@ -21,22 +21,35 @@ $arr = pg_fetch_all($picksResult);
 
 pg_close($dbConn);
 
+$gamePicksSortedByUser['current_week'] = $requestedWeek[1];
+$gamePicksSortedByUser['requested_week'] = $requestedWeek[0];
+$gamePicksSortedByUser['game_week_alias'] = trim($arr[0]['game_week_alias']); 
+
 /*
 ** if the query didn't return a result, tell the caller that, and exit
 */
 if($arr == false) {
-    echo json_encode("no result returned");
+    echo json_encode($gamePicksSortedByUser);
     die();
 };
 
-$gamePicksSortedByUser['current_week'] = $requestedWeek[1];
-$gamePicksSortedByUser['requested_week'] = $requestedWeek[0];
 // the $gamePicksSortedByUser[week_*] key won't exist in the rows
 // pulled from the database, so create it here before using it in the loop
 $gamePicksSortedByUser['week_and_users'][] = $requestedWeekKey;
+$gamePicksSortedByUser['picks'] = [];
 $gamePicksSortedByUser[$requestedWeekKey] = [];
 
 foreach ($arr as $key => $value) {
+    $user_name = trim($value['user_name']);
+    $pick = trim($value['pick']);
+
+    if (!in_array($value['id'], $gamePicksSortedByUser['picks'])) {
+       $gamePicksSortedByUser['picks'][$value['id']]['game'] = $value;
+    }
+
+    if (!in_array($user_name, $gamePicksSortedByUser['picks'][$value['id']])) {
+       $gamePicksSortedByUser['picks'][$value['id']][$user_name] = ['pick' => $pick, 'id' => $value['id']];
+    }
     /*
     ** get the user name and pick and trim them, because the trailing spaces
     ** are causing problems on the client-side javascript
