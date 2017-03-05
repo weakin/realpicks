@@ -19,7 +19,7 @@ if (!isset($group) || empty($group)) {
 
 $dbConn = pg_connect(getDatabaseCredentials()) or die('Could not connect: ' . pg_last_error());
 
-$userInfoQuery = "SELECT id, user_name, user_group, team FROM users WHERE user_name = '$user' AND user_group = '$group'";
+$userInfoQuery = "SELECT id, user_name, user_group, team, name FROM users WHERE user_name = '$user' AND user_group = '$group'";
 $userInfoResult = pg_query($userInfoQuery) or die('userInfoQuery failed: ' . pg_last_error());
 // Performing SQL query
 $userInfoResultSet = pg_fetch_all($userInfoResult);
