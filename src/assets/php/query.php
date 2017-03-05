@@ -7,7 +7,7 @@ include 'current_week.php';
 
 $dbConn = pg_connect(getDatabaseCredentials()) or die('Could not connect: ' . pg_last_error());
 
-$gameWeekSortedByDay = [];
+$gameWeek = [];
 $requestedWeek;
 $requestedWeek = getWeek($_GET['week']);
 
@@ -18,33 +18,15 @@ $arr = pg_fetch_all($result2);
 
 pg_close($dbConn);
 
-$gameWeekSortedByDay['current_week'] = $requestedWeek[1];
-$gameWeekSortedByDay['requested_week'] = $requestedWeek[0];
-$gameWeekSortedByDay['game_week_alias'] = '';
-
 // iterate over the result set, and build an associative array
 // to be converted into JSON and returned to the client
 foreach ($arr as $key => $value) {
-    // edge case first: this case accounts for teams on thier bye week
-    if (empty(trim($value['away_team']))) {
-        $gameWeekSortedByDay['bye_week'][] = $value['home_team'];
-    } else if (array_key_exists($value['game_day_of_week'], $gameWeekSortedByDay)) {
-        $gameWeekSortedByDay[$value['game_day_of_week']][] = $arr[$key];
-    } else {
-        $gameWeekSortedByDay['game_days'][] = $value['game_day_of_week'];
-        $gameWeekSortedByDay['game_week_alias'] = $value['game_week_alias'];
-        $gameWeekSortedByDay['game_dates'][$value['game_day_of_week']] = reformatDate($value['game_date']);
-        $gameWeekSortedByDay[$value['game_day_of_week']] = [];
-        $gameWeekSortedByDay[$value['game_day_of_week']][] = $arr[$key];
-    }
+    $arr[$key]['game_date'] = reformatDate($value['game_date']);
+    $arr[$key]['requested_week'] = $requestedWeek[0];
+    $arr[$key]['current_week'] = $requestedWeek[1];
+    $gameWeek[]= $arr[$key];
 }
 
-// if there are teams on the bye, add the 'bye_week' value
-// to the 'game_days' array so we can iterate over it
-if (array_key_exists('bye_week', $gameWeekSortedByDay)) {
-    $gameWeekSortedByDay['game_days'][] = 'bye_week';
-}
-
-echo json_encode($gameWeekSortedByDay);
+echo json_encode($gameWeek);
 
 ?>
