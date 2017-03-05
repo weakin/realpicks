@@ -4,6 +4,12 @@ header('Content-Type: application/json');
 include 'helper_functions.php';
 include 'credentials.php';
 
+$game_week = validateFormNumberInput($_POST['game_week']);
+if ($game_week > 17) { 
+  echo json_encode('week out of range to update team stats table');
+  die();
+}
+
 $tie = $divisionGame = false;
 $divisionWin = $divisionLoss = $divisionTie = '';
 $winningTeamName = $losingTeamName = '';
@@ -28,7 +34,6 @@ if (isset($_POST['tie'])) { // deal with the edge case of a tie first
     $losing_score = validateFormNumberInput($_POST['losing_score']);
 }
 
-$game_week = validateFormNumberInput($_POST['game_week']);
 $home_team = validateFormStringInput($_POST['home_team']);
 $away_team = validateFormStringInput($_POST['away_team']);
 $home_team_division = validateFormStringInput($_POST['home_team_division']);
@@ -44,7 +49,9 @@ $homeTies = "home_ties=coalesce(home_ties + 1, 1)";
 $awayWins = "away_wins=coalesce(away_wins + 1, 1)";
 $awayLosses = "away_losses=coalesce(away_losses + 1, 1)";
 $awayTies = "away_ties=coalesce(away_ties + 1, 1)";
-$streakCount = "streak=coalesce(streak + 1, 1)";
+$streakWonCount = "streak_wins=coalesce(streak_wins + 1, 1), streak_losses=0, streak_ties=0";
+$streakLostCount = "streak_losses=coalesce(streak_losses + 1, 1), streak_wins=0, streak_ties=0";
+$streakTiedCount = "streak_ties=coalesce(streak_ties + 1, 1), streak_losses=0, streak_wins=0";
 $streakWon = "streak_type='won'";
 $streakLost = "streak_type='lost'";
 $streakTied = "streak_type='tied'";
@@ -99,14 +106,14 @@ function awayTeamTie($streak, $streakType) {
 }
 
 if ($home_team === $winning_team && $tie !== true) {
-    $homeInfo = homeTeamWinnning($streakCount,$streakWon);
-    $awayInfo = awayTeamLosing($streakCount,$streakLost);
+    $homeInfo = homeTeamWinnning($streakWonCount,$streakWon);
+    $awayInfo = awayTeamLosing($streakLostCount,$streakLost);
 } else if ($away_team === $winning_team && $tie !== true) {
-    $homeInfo = homeTeamLosing($streakCount,$streakLost);
-    $awayInfo = awayTeamWinnning($streakCount,$streakWon);
+    $homeInfo = homeTeamLosing($streakLostCount,$streakLost);
+    $awayInfo = awayTeamWinnning($streakWonCount,$streakWon);
 } else if ($tie === true) {
-    $homeInfo = homeTeamTie($streakCount,$streakTied);
-    $awayInfo = awayTeamTie($streakCount,$streakTied);
+    $homeInfo = homeTeamTie($streakTiedCount,$streakTied);
+    $awayInfo = awayTeamTie($streakTiedCount,$streakTied);
 }
 
 $dbConn = pg_connect(getDatabaseCredentials()) or die('Could not connect: ' . pg_last_error());
@@ -140,31 +147,31 @@ $homeStreakType = trim($homeStreakResult[0]['streak_type']);
 $awayStreakType = trim($awayStreakResult[0]['streak_type']);
 
 if ($home_team === $winning_team && $tie !== true) {
-    $homeInfo = homeTeamWinnning($streakCount,$streakWon);
-    $awayInfo = awayTeamLosing($streakCount,$streakLost);
+    $homeInfo = homeTeamWinnning($streakWonCount, $streakWon);
+    $awayInfo = awayTeamLosing($streakLostCount, $streakLost);
     if ($homeStreakType != 'won') {
-        $homeInfo = homeTeamWinnning('streak=1',$streakWon);
+        $homeInfo = homeTeamWinnning($streakWonCount, $streakWon);
     }
     if ($awayStreakType != 'lost') {
-        $awayInfo = awayTeamLosing('streak=1',$streakLost);
+        $awayInfo = awayTeamLosing($streakLostCount, $streakLost);
     }
 } else if ($away_team === $winning_team && $tie !== true) {
-    $homeInfo = homeTeamLosing($streakCount,$streakLost);
-    $awayInfo = awayTeamWinnning($streakCount,$streakWon);
+    $homeInfo = homeTeamLosing($streakLostCount, $streakLost);
+    $awayInfo = awayTeamWinnning($streakWonCount, $streakWon);
     if ($homeStreakType != 'lost') {
-        $homeInfo = homeTeamLosing('streak=1',$streakLost);
+        $homeInfo = homeTeamLosing($streakLostCount, $streakLost);
     }
     if ($awayStreakType != 'won') {
-        $awayInfo = awayTeamWinnning('streak=1',$streakWon);
+        $awayInfo = awayTeamWinnning($streakWonCount, $streakWon);
     }
 } else if ($tie === true) {
-    $homeInfo = homeTeamTie($streakCount,$streakTied);
-    $awayInfo = awayTeamTie($streakCount,$streakTied);
+    $homeInfo = homeTeamTie($streakTiedCount, $streakTied);
+    $awayInfo = awayTeamTie($streakTiedCount, $streakTied);
     if ($homeStreakType != 'tied') {
-        $homeInfo = homeTeamTie('streak=1',$streakTied);
+        $homeInfo = homeTeamTie($streakTiedCount, $streakTied);
     }
     if ($awayStreakType != 'tied') {
-        $awayInfo = awayTeamTie('streak=1',$streakTied);
+        $awayInfo = awayTeamTie($streakTiedCount, $streakTied);
     }
 }
 
