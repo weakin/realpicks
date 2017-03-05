@@ -9,6 +9,9 @@ function reformatDate($dateString) {
 
 function validateFormStringInput($formStringInput) {
     $trimedString = trim($formStringInput);
+    if ($trimedString == '') {
+        return;
+    }
     preg_match('/(^[\w|\s]+$)/',$trimedString,$matchesString);
     return $matchesString[0];
 }
