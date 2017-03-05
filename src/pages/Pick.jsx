@@ -38,7 +38,6 @@ class Pick extends React.Component {
     let homeTeam = ''
     let awayTeam = ''
     let winningTeam = ''
-    // let losingTeam = ''
     let homeTeamScore = ''
     let awayTeamScore = ''
     let replaceSpace = /\s/gi
@@ -55,7 +54,6 @@ class Pick extends React.Component {
     homeTeamImg = homeTeam.toLowerCase().replace(replaceSpace, '')
     awayTeamImg = awayTeam.toLowerCase().replace(replaceSpace, '')
     winningTeam = picksArray[0][1].winning_team !== null ? picksArray[0][1].winning_team.trim() : ''
-    // losingTeam = picksArray[0][1].losing_team !== null ? picksArray[0][1].losing_team.trim() : ''
     homeTeamResult = homeTeam === winningTeam ? 'homeTeam winner' : 'homeTeam'
     awayTeamResult = awayTeam === winningTeam ? 'awayTeam winner' : 'awayTeam'
     homeTeamScore = homeTeam === winningTeam ? picksArray[0][1].winning_score : picksArray[0][1].losing_score
