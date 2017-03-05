@@ -1,5 +1,4 @@
-<?php
-header('Content-Type: application/json');
+<?php header('Content-Type: application/json');
 
 include 'helper_functions.php';
 include 'credentials.php';
@@ -25,15 +24,13 @@ if($arr == false) {
 };
 
 $fullTeamSchedule = array();
-$teamSchedule['team_name'] = $requestedTeam;
 // iterate over the result set, and build an associative array
 // to be converted into JSON and returned to the client
 foreach ($arr as $key => $value) {
-    // edge case first: this case accounts for teams on thier bye week
-        //$teamSchedule[] = [];
-        $teamSchedule[$value['game_week']] = $arr[$key];
-        $teamSchedule[$value['game_week']]['game_date'] = reformatDate($value['game_date']);
-        $fullTeamSchedule[] = $teamSchedule[$value['game_week']];
+  $teamSchedule[$value['game_week']] = $arr[$key];
+  $teamSchedule[$value['game_week']]['team_name'] = $requestedTeam;
+  $teamSchedule[$value['game_week']]['game_date'] = reformatDate($value['game_date']);
+  $fullTeamSchedule[] = $teamSchedule[$value['game_week']];
 }
 
 echo json_encode($fullTeamSchedule);
