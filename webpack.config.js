@@ -18,7 +18,7 @@ module.exports = {
         extensions: ['.js', '.jsx']
     },
     output: {
-        path: 'dist/assets/js',
+        path: path.resolve(__dirname, 'dist/assets/js'),
         publicPath: '/assets/js',
         filename: 'base.js'
     },
