@@ -24,10 +24,13 @@ module.exports = {
     },
   devServer: {
     contentBase: './dist',
-    port: 80,
+    port: 8081,
     historyApiFallback: true,
     hot: true,
-    public: 'localhost:80'
+    public: 'localhost:8081',
+    proxy: {
+      "/assets/php": "http://localhost/realpicks2"
+    }
   },
 plugins: [
   new webpack.HotModuleReplacementPlugin(),
