@@ -18,8 +18,6 @@ class App extends React.Component {
   destructureQueryObject () {
     let cookieObj = this.checkCookie(document.cookie)
     let cookieObjKeys = Object.keys(cookieObj)
-    let user = ''
-    let group = ''
     let query = this.props.location.query
     if (Object.getOwnPropertyNames(this.props.location.query).length === 0 && cookieObjKeys.length === 0) {
       return
