@@ -60,6 +60,7 @@
     "tape-jsx-equals": "^1.0.0",
     "uglifyjs": "^2.4.10",
     "webpack": "^2.2.1",
+    "webpack-dashboard": "^0.3.0",
     "webpack-dev-server": "^2.3.0"
   }
 }
