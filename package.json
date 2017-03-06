@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack -p",
-    "start": "webpack-dev-server --progress --inline --hot --colors --history-api-fallback",
+    "start": "webpack-dashboard -c blue -- webpack-dev-server --progress --inline --hot --colors --history-api-fallback",
     "lint": "standard src/**/*.jsx src/**/*.js | snazzy",
     "test": "mocha --compilers jsx:babel-core/register --require ./test/setup.js --recursive ./test/*test.js"
   },

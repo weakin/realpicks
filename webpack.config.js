@@ -1,5 +1,6 @@
 var webpack = require('webpack');
 var path = require('path');
+var DashboardPlugin = require('webpack-dashboard/plugin');
 
 module.exports = {
   devtool: "source-map",
@@ -32,18 +33,19 @@ module.exports = {
       "/assets/php": "http://localhost/realpicks2"
     }
   },
-plugins: [
-  new webpack.HotModuleReplacementPlugin(),
-  new webpack.optimize.UglifyJsPlugin({
-    sourceMap: true,
-    compress: {
-      warnings: false
-    },
-  }),
-  new webpack.DefinePlugin({
-    'process.env': {
-      'NODE_ENV': JSON.stringify('production')
-    }
-  })
-]
-};
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.optimize.UglifyJsPlugin({
+      sourceMap: true,
+      compress: {
+        warnings: false
+      },
+    }),
+    new webpack.DefinePlugin({
+      'process.env': {
+        'NODE_ENV': JSON.stringify('production')
+      }
+    }),
+    new DashboardPlugin()
+  ]
+}
