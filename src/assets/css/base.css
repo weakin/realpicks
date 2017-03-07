@@ -1,0 +1,272 @@
+body {
+    font-style: normal;
+    font-family: sans-serif;
+    padding: 70px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
+}
+
+.headerAndNav {
+    text-align: center;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    background-color: #cfe6f7;
+    opacity: 0.9;
+    filter: alpha(opacity=90);
+}
+
+.headerAndNav .header {
+  font-weight: bold;
+  font-size: 150%;
+  width: 200px;
+  text-align: center;
+}
+
+.headerAndNav div.false {
+  width: 250px;
+}
+
+.headerAndNav div.true {
+  width: 390px;
+}
+
+.headerAndNav div {
+  margin: 0 auto;
+}
+
+div ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+div ul li {
+    float: left;
+}
+
+div ul li a {
+    display: block;
+    padding: 5px 10px 5px 10px;
+}
+
+
+table.standings {
+    border-collapse: collapse;
+    margin: 0 auto;
+}
+
+table.standings .divisionHeaderRow td {
+    padding: 15px 5px 8px 0px;
+}
+
+table.standings .teamRow td, table.standings .headerRow td {
+    vertical-align: top;
+    padding: 2px 15px 3px 5px;
+    width: 60px;
+    text-align: center;
+}
+
+table.standings  .teamRow td.teamName,  table.standings .headerRow td.teamName {
+    width: 200px;
+    text-align: left;
+}
+
+table.standings.stripe tr:nth-child(even) {
+    background-color: #cfe6f7;
+}
+
+tr:nth-child(even) .wins1.wins, tr:nth-child(even) .home_wins1.home_wins, tr:nth-child(even) .away_wins1.away_wins, tr:nth-child(even) .division_wins1.division_wins, tr:nth-child(even) .streak1.streak, tr:nth-child(even) .total_points_scored1.total_points_scored, tr:nth-child(even) .total_points_surrendered1.total_points_surrendered, tr:nth-child(even) .average_points_scored_per_game1.average_points_scored_per_game, tr:nth-child(even) .average_points_surrendered_per_game1.average_points_surrendered_per_game {
+    background-color: #bff2c1;
+}
+
+tr:nth-child(odd) .wins1.wins, tr:nth-child(odd) .home_wins1.home_wins, tr:nth-child(odd) .away_wins1.away_wins, tr:nth-child(odd) .division_wins1.division_wins, tr:nth-child(odd) .streak1.streak, tr:nth-child(odd) .total_points_scored1.total_points_scored, tr:nth-child(odd) .total_points_surrendered1.total_points_surrendered, tr:nth-child(odd) .average_points_scored_per_game1.average_points_scored_per_game, tr:nth-child(odd) .average_points_surrendered_per_game1.average_points_surrendered_per_game {
+    background-color: #dbffdc;
+}
+
+div.weekHeader {
+    display: inline-block;
+    padding: 0px 10px 0px 10px;
+    font-weight: bold;
+}
+
+span.back, span.forward {
+    display: inline-block;
+    padding: 0px 10px 0px 10px;
+    text-align: center;
+    width: 50px;
+}
+
+div.teamSchedule, div.gameWeek {
+    margin: 0 auto;
+    width: 400px;
+    text-align: center;
+}
+
+div.scheduleWeekHeader {
+    display: block;
+    padding: 18px 0px 5px 0px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.away, .home {
+  display: inline-block;
+  vertical-align: top;
+  width: 106px;
+}
+
+.game {
+  margin: 0px 0px 10px 0px;
+  padding: 0px;
+}
+
+.game > b {
+    display: inline-block;
+    vertical-align: middle;
+    margin-top: 50px;
+    height: 40px;
+    font-size: 130%;
+}
+
+.game .locationTime {
+  padding: 5px 0px 8px 0px;
+}
+
+.game.unselected .locationTime {
+    background-color: #e83333;
+    color: white;
+}
+
+.away > input, .home > input {
+  visibility: hidden;
+  position: absolute;
+}
+
+.away > img, .home > img { /* IMAGE STYLES */
+  cursor:pointer;
+  border:3px solid transparent;
+  border-top-right-radius: 30px;
+  border-bottom-left-radius: 30px;
+  transition: 0.5s;
+}
+
+label > input:checked + img, label > img.winner { /* (RADIO CHECKED) IMAGE STYLES */
+  border:3px solid #00CC66;
+}
+
+label > input:disabled + img, #bye img, label > img.false.past { /* (RADIO CHECKED) IMAGE STYLES */
+  opacity: 0.5;
+  cursor: auto;
+}
+
+.home > img, .homeTeam img {
+  transform: scaleX(-1);
+}
+
+span.teamPageTitle {
+  font-weight: bold;
+  font-size: 110%;
+}
+
+div.teamName {
+    height: 40px;
+    vertical-align: text-top;
+}
+
+div.score.winner {
+    color: #00CC66;
+    font-weight: bold;
+}
+
+button.adminSubmit {
+    display: block;
+    margin: 0 auto;
+    margin-top: 10px;
+    background-color: white;
+    font-size: 110%;
+    padding: 5px 15px 5px 15px;
+    border: 2px black solid;
+    border-bottom-right-radius: 15px;
+    border-top-left-radius: 15px;
+}
+
+/* For the 'Picks' page */
+
+div.gameRow {
+    margin-top: 20px;
+    text-align: center;
+}
+
+div.gameRow span {
+    display: inline-block;
+    vertical-align: top;
+}
+
+div.gameRow img {
+    width: 75%;
+    border: 3px solid transparent;
+}
+
+div.gameRow span.game {
+    margin-right: 20px;
+}
+
+div.gameRow span.name {
+    display: none;
+}
+
+div.gameRow span.winner {
+    font-weight: bold;
+    color: #00CC66;
+}
+
+div.gameRow span.winner img {
+    border-radius: 15px;
+    border:3px solid #00CC66;
+}
+
+p.rankings {
+  margin: 0 auto;
+  width: 300px;
+}
+
+div span.totalHeader, div span.weekHeader {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+    font-size: 120%;
+}
+
+div.total span, div.week span {
+    display: inline-block;
+    width: 130px;
+    margin: 0px;
+}
+
+div span.score {
+    text-align: left;
+    padding-left: 20px;
+}
+
+div span.name {
+    text-align: right;
+    padding-right: 20px;
+}
+
+span.hide {
+    visibility: hidden;
+}
+
+div.dayAndDateHeader {
+    margin: 5px 0px 15px 0px;
+    font-size: 110%;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+div.teams {
+  text-align: center;
+}
