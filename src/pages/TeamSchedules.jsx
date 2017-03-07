@@ -33,12 +33,12 @@ class TeamSchedules extends React.Component {
     window.addEventListener('popstate', function (e) {
       let teamNameRegEx = /teams\/([\w|\s]+)\W/
       let foundTeamName = document.URL.match(teamNameRegEx)
+      if (foundTeamName === null) { return }
       if (viewedTeamObjects.hasOwnProperty(foundTeamName[1]) === true) {
         thisHack.setState(viewedTeamObjects[foundTeamName])
       } else {
         viewedTeams.push(foundTeamName[1])
       }
-      thisHack.scrollToTop()
     })
   }
 
@@ -64,7 +64,6 @@ class TeamSchedules extends React.Component {
   }
 
   scrollToTop () {
-    console.log('in scrollToTop function')
     $('html,body').animate({scrollTop:0}, 1000)
   }
 
