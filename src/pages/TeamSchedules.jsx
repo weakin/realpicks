@@ -64,9 +64,8 @@ class TeamSchedules extends React.Component {
   }
 
   scrollToTop () {
-    $('html,body').animate({
-      scrollTop: $('html,body').top
-    }, 'slow')
+    console.log('in scrollToTop function')
+    $('html,body').animate({scrollTop:0}, 1000)
   }
 
   render () {
