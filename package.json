@@ -7,7 +7,8 @@
     "build": "webpack -p",
     "start": "webpack-dashboard -c blue -- webpack-dev-server --progress --inline --hot --colors --history-api-fallback",
     "lint": "standard src/**/*.jsx src/**/*.js | snazzy",
-    "test": "mocha --compilers jsx:babel-core/register --require ./test/setup.js --recursive ./test/*test.js"
+    "coverage": "babel-node ./node_modules/.bin/isparta cover --include 'src/pages/*.js*' _mocha",
+    "test": "mocha"
   },
   "keywords": [
     "NFL",
@@ -47,7 +48,10 @@
     "enzyme": "^2.4.1",
     "extend-tape": "^1.2.0",
     "faucet": "0.0.1",
+    "isparta": "^4.0.0",
+    "istanbul": "^0.4.5",
     "jsdom": "^9.11.0",
+    "jsdom-global": "^2.1.1",
     "mocha": "^3.2.0",
     "react-addons-test-utils": "^15.3.1",
     "react-hot-loader": "^3.0.0-beta.3",
