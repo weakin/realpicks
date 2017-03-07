@@ -8,11 +8,8 @@ class TeamSchedules extends React.Component {
     super(props)
 
     this.state = { schedule: [], team: '', viewedTeams: [], viewedTeamObjects: {} }
-
     this.fetchTeamInfo = this.fetchTeamInfo.bind(this)
-
     this.addWindowListener = this.addWindowListener.bind(this)
-
     this.scrollToTop = this.scrollToTop.bind(this)
   }
 
@@ -25,6 +22,7 @@ class TeamSchedules extends React.Component {
     if (this.props.params.team !== this.state.team) {
       this.state.team = this.props.params.team
       this.fetchTeamInfo(this.props.params.team)
+      this.scrollToTop()
     }
   }
 
