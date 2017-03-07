@@ -1,6 +1,12 @@
 /* setup.js */
 
 var jsdom = require('jsdom').jsdom;
+const noop = () => {};
+
+require.extensions['.css'] = noop;
+require.extensions['.ico'] = noop;
+require.extensions['.png'] = noop;
+require.extensions['.svg'] = noop;
 
 global.document = jsdom('');
 global.window = document.defaultView;
