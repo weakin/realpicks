@@ -10,11 +10,8 @@ class GameWeek extends React.Component {
     super(props)
 
     this.state = {schedule: [], game_week: 0, game_week_alias: '', viewedWeeks: [], viewedWeekObjects: []}
-
     this.fetchWeekInfo = this.fetchWeekInfo.bind(this)
-
     this.addWindowListener = this.addWindowListener.bind(this)
-
     this.scrollToTop = this.scrollToTop.bind(this)
   }
 
@@ -67,9 +64,7 @@ class GameWeek extends React.Component {
   }
 
   scrollToTop () {
-    $('html,body').animate({
-      scrollTop: $('html,body').top
-    }, 'slow')
+    $('html,body').animate({scrollTop:0}, 1000)
   }
 
   render () {
