@@ -7,11 +7,8 @@ class Standings extends React.Component {
     super(props)
 
     this.state = { standings: [], sortColumn: '', sortOrder: '', conferences: [], division: [] }
-
     this.fetchStandings = this.fetchStandings.bind(this)
-
     this.resetStandings = this.resetStandings.bind(this)
-
     this.doSort = this.doSort.bind(this)
   }
 
