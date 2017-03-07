@@ -1,0 +1,3 @@
+--compilers jsx:babel-core/register
+--require jsdom-global/register
+--require test/setup.js
