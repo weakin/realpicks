@@ -3,6 +3,8 @@ import ajax from 'superagent'
 
 import List from './List'
 
+import 'file-loader!../assets/css/base.css'
+
 class App extends React.Component {
   constructor (props) {
     super(props)
