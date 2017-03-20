@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack -p",
-    "start": "webpack-dashboard -c blue -- webpack-dev-server --progress --inline --hot --colors --history-api-fallback",
+    "start": "webpack-dashboard -c blue -- webpack-dev-server --progress",
     "lint": "standard src/**/*.jsx src/**/*.js | snazzy",
     "coverage": "babel-node ./node_modules/.bin/isparta cover --include 'src/pages/*.js*' _mocha",
     "test": "mocha"
@@ -45,8 +45,10 @@
     "babel-register": "^6.23.0",
     "babel-tape-runner": "^2.0.1",
     "chai": "^3.5.0",
+    "css-loader": "^0.27.3",
     "enzyme": "^2.4.1",
     "extend-tape": "^1.2.0",
+    "extract-text-webpack-plugin": "^2.1.0",
     "faucet": "0.0.1",
     "file-loader": "^0.10.1",
     "isparta": "^4.0.0",
@@ -61,6 +63,7 @@
     "snazzy": "^5.0.0",
     "sockjs": "^0.3.18",
     "standard": "^8.6.0",
+    "style-loader": "^0.14.1",
     "tape": "^4.6.0",
     "tape-jsx-equals": "^1.0.0",
     "uglifyjs": "^2.4.10",
