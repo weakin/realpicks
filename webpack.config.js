@@ -1,6 +1,8 @@
 var webpack = require('webpack');
 var path = require('path');
 var DashboardPlugin = require('webpack-dashboard/plugin');
+var BrowserSyncPlugin = require('browser-sync-webpack-plugin');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   devtool: "source-map",
@@ -13,18 +15,26 @@ module.exports = {
       test: /\.jsx?$/,
       exclude: /node_modules/,
       loader: 'babel-loader'
+    },
+    {
+      test: /\.css$/,
+      use: ExtractTextPlugin.extract({
+        fallback: "style-loader",
+        use: "css-loader",
+      })
     }]
   },
   resolve: {
-        extensions: ['.js', '.jsx']
-    },
-    output: {
-        path: path.resolve(__dirname, 'dist/assets/js'),
-        publicPath: '/assets/js',
-        filename: 'base.js'
-    },
+    extensions: ['.js', '.jsx']
+  },
+  output: {
+    path: path.resolve(__dirname, 'dist/assets'),
+    publicPath: '/assets/js',
+    filename: 'js/base.js'
+  },
   devServer: {
-    contentBase: './dist',
+    contentBase: './src',
+    publicPath: '/assets/',
     port: 8081,
     historyApiFallback: true,
     hot: true,
@@ -34,7 +44,6 @@ module.exports = {
     }
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
     new webpack.optimize.UglifyJsPlugin({
       sourceMap: true,
       compress: {
@@ -46,6 +55,13 @@ module.exports = {
         'NODE_ENV': JSON.stringify('production')
       }
     }),
-    new DashboardPlugin()
+    new ExtractTextPlugin('css/base.css'),
+    new DashboardPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
+    new BrowserSyncPlugin({
+      host: 'localhost',
+      port: 8081,
+      proxy: 'http://localhost:8081/'
+    })
   ]
 }
