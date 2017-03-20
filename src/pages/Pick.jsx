@@ -28,9 +28,10 @@ class Pick extends React.Component {
     let forwardArrow = ''
     let requestedWeek = Number(requestedWeekArg)
     let currentWeek = Number(currentWeekArg)
+    console.log('gameWeekAlias length: ' + String(gameWeekAlias.length))
     backArrow = requestedWeek <= currentWeek && currentWeek >= 2 && requestedWeek >= 2 ? <Link to={`/picks/${Number(requestedWeek) - 1}`} onClick={() => this.navClickHandler('back')}>&lt;&lt;</Link> : ''
     forwardArrow = currentWeek <= 21 && requestedWeek < currentWeek ? <Link to={`/picks/${Number(requestedWeek) + 1}`} onClick={() => this.navClickHandler('forward')}>&gt;&gt;</Link> : ''
-    return <span className='header' key={key}>{backArrow} {gameWeekAlias} {forwardArrow}</span>
+    return <span className='header nav' key={key}>{backArrow} {gameWeekAlias} {forwardArrow}</span>
   }
 
   buildPicksRow (picksArray) {
