@@ -12,7 +12,6 @@ class GameWeek extends React.Component {
     this.state = {schedule: [], game_week: 0, current_week: 0, game_week_alias: '', viewedWeeks: [], viewedWeekObjects: []}
     this.fetchWeekInfo = this.fetchWeekInfo.bind(this)
     this.addHashchangeListener = this.addHashchangeListener.bind(this)
-    this.scrollToTop = this.scrollToTop.bind(this)
     this.finishAndRefresh = this.finishAndRefresh.bind(this)
   }
 
@@ -85,10 +84,6 @@ class GameWeek extends React.Component {
         }
       }
     )
-  }
-
-  scrollToTop () {
-    $('html,body').animate({scrollTop: 0}, 1000)
   }
 
   render () {
