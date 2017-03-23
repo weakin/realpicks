@@ -12,11 +12,16 @@ class Picks extends React.Component {
     this.renderGamePicks = this.renderGamePicks.bind(this)
     this.navClickHandler = this.navClickHandler.bind(this)
     this.addWindowListener = this.addWindowListener.bind(this)
+    this.scrollToTop = this.scrollToTop.bind(this)
   }
 
   componentDidMount () {
     this.fetchPicksInfo(this.props.params.week)
     this.addWindowListener()
+  }
+
+  componentDidUpdate () {
+    this.scrollToTop()
   }
 
   addWindowListener () {
@@ -68,6 +73,10 @@ class Picks extends React.Component {
     )
   }
 
+  scrollToTop () {
+    $('html,body').animate({scrollTop: 0}, 1000)
+  }
+
   navClickHandler (weekInt) {
     this.fetchPicksInfo(weekInt)
   }
@@ -89,6 +98,7 @@ class Picks extends React.Component {
     let firstKey = 0
     let keys = []
     let allPicks = ''
+    let headerText = this.state.gameWeekAlias 
     if (this.state.picks !== undefined && this.state.picks !== null) {
       keysArr = Object.keys(this.state.picks)
       firstKey = keysArr[0]
@@ -108,7 +118,9 @@ class Picks extends React.Component {
     }
 
     if (boo.length === 0) {
-      allPicks = <div className='noPicks'>No user has made Picks for this week!</div>
+      // if no user has made picks for this week, set the headerText to tell the user that, and set allPicks to an empty string
+      headerText = 'No user has made Picks for this week!'
+      allPicks = ''
     } else {
       allPicks = boo.map((b, i) => {
         return <Pick caller='picksRow' picks={b} key={'pick' + String(i)} />
@@ -116,7 +128,7 @@ class Picks extends React.Component {
     }
 
     return <div className='picks'>
-      <Pick caller='header' headerArray={keys} requestedWeek={this.state.requestedWeek} currentWeek={this.state.currentWeek} gameWeekAlias={this.state.gameWeekAlias} navClickHandler={this.navClickHandler} />
+      <Pick caller='header' headerArray={keys} requestedWeek={this.state.requestedWeek} currentWeek={this.state.currentWeek} gameWeekAlias={headerText} navClickHandler={this.navClickHandler} />
       {allPicks}
     </div>
   }
