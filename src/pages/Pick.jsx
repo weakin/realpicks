@@ -90,7 +90,7 @@ class Pick extends React.Component {
   render () {
     if (this.props.caller === 'header') {
       if (this.props.headerArray.length === 0) {
-        return <div className='headerRow'>{this.buildHeaderRowNav(0, this.props.requestedWeek, this.props.currentWeek, this.props.gameWeekAlias)}</div>
+        return <div className='headerRow noPicks'>{this.buildHeaderRowNav(0, this.props.requestedWeek, this.props.currentWeek, this.props.gameWeekAlias)}</div>
       }
       let headers = []
       for (let i = 0; i < this.props.headerArray.length; i++) {
