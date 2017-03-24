@@ -9,37 +9,41 @@ class TeamSchedules extends React.Component {
 
     this.state = { schedule: [], team: '', viewedTeams: [], viewedTeamObjects: {} }
     this.fetchTeamInfo = this.fetchTeamInfo.bind(this)
-    this.addWindowListener = this.addWindowListener.bind(this)
+    this.addHashchangeListener = this.addHashchangeListener.bind(this)
     this.scrollToTop = this.scrollToTop.bind(this)
   }
 
   componentDidMount () {
     this.fetchTeamInfo(this.props.params.team)
-    this.addWindowListener()
+    this.addHashchangeListener()
   }
 
   componentDidUpdate () {
-    if (this.props.params.team !== this.state.team) {
-      this.state.team = this.props.params.team
-      this.fetchTeamInfo(this.props.params.team)
-      this.scrollToTop()
-    }
+    this.scrollToTop()
   }
 
-  addWindowListener () {
-    let viewedTeams = this.state.viewedTeams
-    let viewedTeamObjects = this.state.viewedTeamObjects
-    let thisHack = this
-    window.addEventListener('popstate', function (e) {
+  /*
+  ** The addHashchangeListener function works on the same idea in each component it's placed in.
+  ** It listens for changes to location.hash and updates the component state accordingly. If a user is navigating 
+  ** within the component, each time a new data request comes back from the server (for GameWeek, Picks, Rankings, 
+  ** or TeamSchedules) it pushs the relevant data into a object on the component state and records that that data 
+  ** has been requested. While still in the component if the user navigates away and then requests data that has
+  ** already been viewed, the addHashchangeListener sees that the data is already on the data storage object state
+  ** and calls setState with the correct data. This prevents multiple API requests for the same data. 
+  ** If the data hasn't been requested yet, it calls the function that fetches it.
+  */
+  addHashchangeListener () {
+    window.addEventListener('hashchange', function (e) {
       let teamNameRegEx = /teams\/([\w|\s]+)\W/
-      let foundTeamName = document.URL.match(teamNameRegEx)
+      let foundTeamNameRegExGroup = document.URL.match(teamNameRegEx)
+      let foundTeamName = foundTeamNameRegExGroup !== null ? String(foundTeamNameRegExGroup[1]) : null
       if (foundTeamName === null) { return }
-      if (viewedTeamObjects.hasOwnProperty(foundTeamName[1]) === true) {
-        thisHack.setState(viewedTeamObjects[foundTeamName])
-      } else {
-        viewedTeams.push(foundTeamName[1])
+      if (this.state.viewedTeamObjects.hasOwnProperty(foundTeamName) === true) {
+        this.setState(this.state.viewedTeamObjects[foundTeamName])
+      } else if (this.state.viewedTeamObjects.hasOwnProperty(foundTeamName) !== true && this.state.viewedTeams.indexOf(foundTeamName) === -1) {
+        this.fetchTeamInfo(foundTeamName)
       }
-    })
+    }.bind(this))
   }
 
   fetchTeamInfo (team) {
@@ -64,7 +68,7 @@ class TeamSchedules extends React.Component {
   }
 
   scrollToTop () {
-    $('html,body').animate({scrollTop:0}, 1000)
+    $('html,body').animate({scrollTop: 0}, 1000)
   }
 
   render () {
