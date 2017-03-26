@@ -304,14 +304,14 @@ class Game extends React.Component {
       <label className='away'>
         {awayTeamInput}
         <img id={game.id} className={`${authorized} ${awayTeamResult} ${past}`} src={`assets/img/${awayTeamImg}.png`} alt={awayTeam} /><br />
-        <div className='teamName'><Link to={`/teams/${awayTeam}`} onClick={() => this.fetchTeamInfo(awayTeam)}>{game.away_team}</Link></div>
+        <div className='teamName'><Link to={`/teams/${awayTeam}`}>{game.away_team}</Link></div>
         <div className={`score ${awayTeamResult}`}>{awayTeamScore}{awayTeamScoreInput}</div>
       </label>
       <b>@</b>
       <label className='home'>
         {homeTeamInput}
         <img id={game.id} className={`${authorized} ${homeTeamResult} ${past}`} src={`assets/img/${homeTeamImg}.png`} alt={homeTeam} /><br />
-        <div className='teamName'><Link to={`/teams/${homeTeam}`} onClick={() => this.fetchTeamInfo(homeTeam)}>{homeTeam}</Link></div>
+        <div className='teamName'><Link to={`/teams/${homeTeam}`}>{homeTeam}</Link></div>
         <div className={`score ${homeTeamResult}`}>{homeTeamScore}{homeTeamScoreInput}</div>
       </label>
       <div className='locationTime'>{game.game_location} -  EST {gameTime}{adminFormSubmit}</div>
