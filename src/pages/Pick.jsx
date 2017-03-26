@@ -9,18 +9,6 @@ class Pick extends React.Component {
 
     this.buildPicksRow = this.buildPicksRow.bind(this)
     this.buildHeaderRowNav = this.buildHeaderRowNav.bind(this)
-    this.navClickHandler = this.navClickHandler.bind(this)
-  }
-
-  navClickHandler (navType) {
-    let reqWeek = Number(this.props.requestedWeek)
-    if (typeof this.props.navClickHandler === 'function') {
-      if (navType === 'back') {
-        this.props.navClickHandler(reqWeek - 1)
-      } else if (navType === 'forward') {
-        this.props.navClickHandler(reqWeek + 1)
-      }
-    }
   }
 
   buildHeaderRowNav (key, requestedWeekArg, currentWeekArg, gameWeekAlias) {
@@ -29,8 +17,8 @@ class Pick extends React.Component {
     let requestedWeek = Number(requestedWeekArg)
     let currentWeek = Number(currentWeekArg)
     console.log('gameWeekAlias length: ' + String(gameWeekAlias.length))
-    backArrow = requestedWeek <= currentWeek && currentWeek >= 2 && requestedWeek >= 2 ? <Link to={`/picks/${Number(requestedWeek) - 1}`} onClick={() => this.navClickHandler('back')}>&lt;&lt;</Link> : ''
-    forwardArrow = currentWeek <= 21 && requestedWeek < currentWeek ? <Link to={`/picks/${Number(requestedWeek) + 1}`} onClick={() => this.navClickHandler('forward')}>&gt;&gt;</Link> : ''
+    backArrow = requestedWeek <= currentWeek && currentWeek >= 2 && requestedWeek >= 2 ? <Link to={`/picks/${Number(requestedWeek) - 1}`}>&lt;&lt;</Link> : ''
+    forwardArrow = currentWeek <= 21 && requestedWeek < currentWeek ? <Link to={`/picks/${Number(requestedWeek) + 1}`}>&gt;&gt;</Link> : ''
     return <span className='header nav' key={key}>{backArrow} {gameWeekAlias} {forwardArrow}</span>
   }
 
