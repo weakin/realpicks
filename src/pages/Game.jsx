@@ -8,26 +8,10 @@ class Game extends React.Component {
 
     this.state = { byeWeekTeams: [], caller: this.props.caller, selectedGames: [], gameDayAndDate: [] }
 
-    this.fetchTeamInfo = this.fetchTeamInfo.bind(this)
     this.userSubmit = this.userSubmit.bind(this)
     this.removeGameFromSelectedGames = this.removeGameFromSelectedGames.bind(this)
     this.fixGameTime = this.fixGameTime.bind(this)
     this.dayAndDateHeader = this.dayAndDateHeader.bind(this)
-  }
-
-  fetchTeamInfo (team) {
-    let baseURL = 'assets/php/team_schedule_query.php?team='
-    ajax.get(`${baseURL}${team}`)
-      .end((error, response) => {
-        if (!error && response) {
-          this.props.games = response.body
-          this.props.team = this.props.caller === 'teamSchedule' ? team : ''
-          this.setState({ schedule: response.body, team: response.body[0].team_name })
-        } else {
-          console.log('There was an error fetching data', error)
-        }
-      }
-    )
   }
 
   render () {
