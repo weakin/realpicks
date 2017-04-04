@@ -9,13 +9,17 @@ class TeamSchedules extends React.Component {
 
     this.state = { schedule: [], team: '', viewedTeams: [], viewedTeamObjects: {} }
     this.fetchTeamInfo = this.fetchTeamInfo.bind(this)
-    this.addHashchangeListener = this.addHashchangeListener.bind(this)
+    this.hashChangeListener = this.hashChangeListener.bind(this)
     this.scrollToTop = this.scrollToTop.bind(this)
   }
 
   componentDidMount () {
     this.fetchTeamInfo(this.props.params.team)
-    this.addHashchangeListener()
+    window.addEventListener('hashchange', this.hashChangeListener, false)
+  }
+
+  componentWillUnmount () {
+    window.removeEventListener('hashchange', this.hashChangeListener, false)
   }
 
   componentDidUpdate () {
@@ -23,27 +27,26 @@ class TeamSchedules extends React.Component {
   }
 
   /*
-  ** The addHashchangeListener function works on the same idea in each component it's placed in.
-  ** It listens for changes to location.hash and updates the component state accordingly. If a user is navigating 
+  ** The hashChangeListener function works on the same idea in each component it's placed in.
+  ** It listens for changes to location.hash and updates the component state accordingly. On initial load of the 
+  ** component, the componentDidMount calls the data fetching function and  If a user is navigating 
   ** within the component, each time a new data request comes back from the server (for GameWeek, Picks, Rankings, 
-  ** or TeamSchedules) it pushs the relevant data into a object on the component state and records that that data 
-  ** has been requested. While still in the component if the user navigates away and then requests data that has
-  ** already been viewed, the addHashchangeListener sees that the data is already on the data storage object state
+  ** or TeamSchedules) it pushes the relevant data into a object on the component state and records that that data 
+  ** has been requested. While still in the same component if the user navigates away and then requests data that has
+  ** already been viewed, the hashChangeListener sees that the data is already on the data storage object state
   ** and calls setState with the correct data. This prevents multiple API requests for the same data. 
   ** If the data hasn't been requested yet, it calls the function that fetches it.
   */
-  addHashchangeListener () {
-    window.addEventListener('hashchange', function (e) {
-      let teamNameRegEx = /teams\/([\w|\s]+)\W/
-      let foundTeamNameRegExGroup = document.URL.match(teamNameRegEx)
-      let foundTeamName = foundTeamNameRegExGroup !== null ? String(foundTeamNameRegExGroup[1]) : null
-      if (foundTeamName === null) { return }
-      if (this.state.viewedTeamObjects.hasOwnProperty(foundTeamName) === true) {
-        this.setState(this.state.viewedTeamObjects[foundTeamName])
-      } else if (this.state.viewedTeamObjects.hasOwnProperty(foundTeamName) !== true && this.state.viewedTeams.indexOf(foundTeamName) === -1) {
-        this.fetchTeamInfo(foundTeamName)
-      }
-    }.bind(this))
+  hashChangeListener () {
+    let teamNameRegEx = /teams\/([\w|\s]+)\W/
+    let foundTeamNameRegExGroup = document.URL.match(teamNameRegEx)
+    let foundTeamName = foundTeamNameRegExGroup !== null ? String(foundTeamNameRegExGroup[1]) : null
+    if (foundTeamName === null) { return }
+    if (this.state.viewedTeamObjects.hasOwnProperty(foundTeamName) === true) {
+      this.setState(this.state.viewedTeamObjects[foundTeamName])
+    } else if (this.state.viewedTeamObjects.hasOwnProperty(foundTeamName) !== true && this.state.viewedTeams.indexOf(foundTeamName) === -1) {
+      this.fetchTeamInfo(foundTeamName)
+    }
   }
 
   fetchTeamInfo (team) {
@@ -68,7 +71,15 @@ class TeamSchedules extends React.Component {
   }
 
   scrollToTop () {
-    $('html,body').animate({scrollTop: 0}, 1000)
+    let top = window.scrollY
+    if (top > 100 && top < 499) {
+      $('html,body').animate({scrollTop: 0}, 250)
+    } else if (top > 500 && top < 999) {
+      $('html,body').animate({scrollTop: 0}, 500)
+    } else if (top > 1000) {
+      $('html,body').animate({scrollTop: 0}, 750)
+    } 
+    console.log(top)
   }
 
   render () {
