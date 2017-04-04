@@ -28,13 +28,13 @@ class TeamSchedules extends React.Component {
 
   /*
   ** The hashChangeListener function works on the same idea in each component it's placed in.
-  ** It listens for changes to location.hash and updates the component state accordingly. On initial load of the 
-  ** component, the componentDidMount calls the data fetching function and  If a user is navigating 
-  ** within the component, each time a new data request comes back from the server (for GameWeek, Picks, Rankings, 
-  ** or TeamSchedules) it pushes the relevant data into a object on the component state and records that that data 
+  ** It listens for changes to location.hash and updates the component state accordingly. On initial load of the
+  ** component, the componentDidMount calls the data fetching function and  If a user is navigating
+  ** within the component, each time a new data request comes back from the server (for GameWeek, Picks, Rankings,
+  ** or TeamSchedules) it pushes the relevant data into a object on the component state and records that that data
   ** has been requested. While still in the same component if the user navigates away and then requests data that has
   ** already been viewed, the hashChangeListener sees that the data is already on the data storage object state
-  ** and calls setState with the correct data. This prevents multiple API requests for the same data. 
+  ** and calls setState with the correct data. This prevents multiple API requests for the same data.
   ** If the data hasn't been requested yet, it calls the function that fetches it.
   */
   hashChangeListener () {
@@ -78,8 +78,7 @@ class TeamSchedules extends React.Component {
       $('html,body').animate({scrollTop: 0}, 500)
     } else if (top > 1000) {
       $('html,body').animate({scrollTop: 0}, 750)
-    } 
-    console.log(top)
+    }
   }
 
   render () {
