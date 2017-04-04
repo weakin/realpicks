@@ -11,54 +11,45 @@ class GameWeek extends React.Component {
 
     this.state = {schedule: [], game_week: 0, current_week: 0, game_week_alias: '', viewedWeeks: [], viewedWeekObjects: []}
     this.fetchWeekInfo = this.fetchWeekInfo.bind(this)
-    this.addHashchangeListener = this.addHashchangeListener.bind(this)
-    this.finishAndRefresh = this.finishAndRefresh.bind(this)
+    this.hashChangeListener = this.hashChangeListener.bind(this)
   }
 
   componentDidMount () {
     this.fetchWeekInfo(this.props.params.week)
     this.state.viewedWeeks = this.state.viewedWeeks.splice(0)
-    this.addHashchangeListener()
+    window.addEventListener('hashchange', this.hashChangeListener, false)
   }
 
-  finishAndRefresh () {
-    let paramWeek = Number(this.props.params.week)
-    if (this.state.game_week === this.state.current_week && this.props.params.week !== undefined && paramWeek !== this.state.game_week) {
-      if (this.state.viewedWeeks.indexOf(paramWeek) > -1) {
-        console.log('called finishandrefresh 1')
-        console.log('this.state.game_week: ' + String(this.state.game_week))
-        console.log('this.state.current_week: ' + String(this.state.current_week))
-        console.log('this.props.params.week: ' + String(this.props.params.week))
-        this.setState(this.state.viewedWeekObjects[paramWeek])
-        return
-      }
-    } else if (this.state.game_week === this.state.current_week && this.props.params.week !== undefined && paramWeek === this.state.game_week) {
-      if (this.state.viewedWeeks.indexOf(paramWeek) > -1) {
-        console.log('called finishAndRefresh 2')
-        this.setState(this.state.viewedWeekObjects[this.state.game_week])
-        return
-      }
+  componentWillUnmount () {
+    window.removeEventListener('hashchange', this.hashChangeListener, false)
+  }
+
+  hashChangeListener () {
+    console.log('GameWeek.jsx - addEventListener - if block: 1')
+    let gameWeekRegEx = /games\/(\d{1,2})/
+    let foundGameWeek = document.URL.match(gameWeekRegEx)
+    let foundGameWeekInt = foundGameWeek !== null ? Number(foundGameWeek[1]) : null
+    if (this.state.viewedWeeks.indexOf(foundGameWeekInt) === -1 && foundGameWeekInt !== null && this.state.current_week !== (foundGameWeekInt + 1)) {
+      // the requested data has not been viewed, there is an integer from location.hash, and that int is not one less than the current week int
+      console.log('addEventListener - if block: 1')
+      this.fetchWeekInfo(foundGameWeekInt)
+    } else if (this.state.viewedWeeks.indexOf(foundGameWeekInt) === -1 && foundGameWeekInt !== null && (this.state.current_week - 1) === foundGameWeekInt) {
+      // the requested data has not been viewed, there is an integer from location.hash, and that int is one less than the current week int
+      console.log('addEventListener - if block: 2')
+      this.fetchWeekInfo(foundGameWeekInt)
+    } else if (this.state.viewedWeeks.indexOf(this.state.current_week) === -1 && foundGameWeekInt === null && this.state.viewedWeeks.length > 0) {
+      // the requested data has not been viewed, there is no integer from location.hash, and as there are no other weeks in memory, display the current week
+      console.log('addEventListener - if block: 3')
+      this.fetchWeekInfo(this.state.current_week)
+    } else if (this.state.viewedWeeks.indexOf(this.state.current_week) > -1 && foundGameWeekInt === null) {
+      // the requested data has already been viewed, is the current week, and there is no week integer coming in from location.hash, so update the state from the stored data 
+      console.log('addEventListener - if block: 4')
+      this.setState(this.state.viewedWeekObjects[this.state.current_week])
+    } else if (this.state.viewedWeeks.indexOf(foundGameWeekInt) > -1) {
+      console.log('addEventListener - if block: 5')
+      // the requested data has already been viewed and is stored, so update the state from the stored data 
+      this.setState(this.state.viewedWeekObjects[foundGameWeekInt])
     }
-  }
-
-  addHashchangeListener () {
-    window.addEventListener('hashchange', function (e) {
-      console.log('called addHashchangeListener: boo!')
-      let gameWeekRegEx = /games\/(\d{1,2})/
-      let foundGameWeek = document.URL.match(gameWeekRegEx)
-      let foundGameWeekInt = foundGameWeek !== null ? Number(foundGameWeek[1]) : null
-      if (this.state.viewedWeeks.indexOf(foundGameWeekInt) === -1 && foundGameWeekInt !== null && this.state.current_week !== (foundGameWeekInt + 1)) {
-        this.fetchWeekInfo(foundGameWeekInt)
-      } else if (this.state.viewedWeeks.indexOf(foundGameWeekInt) === -1 && foundGameWeekInt !== null && (this.state.current_week - 1) === foundGameWeekInt) {
-        this.fetchWeekInfo(foundGameWeekInt)
-      } else if (this.state.viewedWeeks.indexOf(foundGameWeekInt) === -1 && foundGameWeekInt === null && this.state.viewedWeeks !== null) {
-        this.fetchWeekInfo(this.state.current_week)
-      } else if (this.state.viewedWeeks.indexOf(foundGameWeekInt) > -1) {
-        this.setState(this.state.viewedWeekObjects[foundGameWeekInt], () => { this.finishAndRefresh() })
-      } else if (foundGameWeekInt === null) {
-        this.setState(this.state.viewedWeekObjects[this.state.viewedWeeks[0]], () => { this.finishAndRefresh() })
-      }
-    }.bind(this))
   }
 
   fetchWeekInfo (weekInt) {
@@ -78,7 +69,7 @@ class GameWeek extends React.Component {
           let forward = Number(response.body[0].game_week) < 21 ? Number(response.body[0].game_week) + 1 : ''
           let gameWeekObject = { game_week: Number(response.body[0].game_week), game_week_alias: response.body[0].game_week_alias.trim(), current_week: Number(response.body[0].current_week), schedule: response.body, back: back, forward: forward }
           this.state.viewedWeekObjects[gameWeekInt] = gameWeekObject
-          this.setState(gameWeekObject, () => { this.finishAndRefresh() })
+          this.setState(gameWeekObject)
         } else {
           console.log('There was an error fetching data', error)
         }
@@ -87,8 +78,8 @@ class GameWeek extends React.Component {
   }
 
   render () {
-    let backLink = this.state.back !== undefined && this.state.back >= 1 ? <span className='back'><Link to={`/games/${this.state.back}`} onClick={() => this.fetchWeekInfo(this.state.back)}>&lt;&lt;</Link></span> : <span className='back'>{String.fromCharCode(160)}</span>
-    let forwardLink = this.state.forward !== undefined && this.state.forward <= 21 && this.state.forward !== '' ? <span className='forward'><Link to={`/games/${this.state.forward}`} onClick={() => this.fetchWeekInfo(this.state.forward)}>&gt;&gt;</Link></span> : <span className='forward'>{String.fromCharCode(160)}</span>
+    let backLink = this.state.back !== undefined && this.state.back >= 1 ? <span className='back'><Link to={`/games/${this.state.back}`} >&lt;&lt;</Link></span> : <span className='back'>{String.fromCharCode(160)}</span>
+    let forwardLink = this.state.forward !== undefined && this.state.forward <= 21 && this.state.forward !== '' ? <span className='forward'><Link to={`/games/${this.state.forward}`} >&gt;&gt;</Link></span> : <span className='forward'>{String.fromCharCode(160)}</span>
     return (
       <div className='gameWeek'>
         {backLink}
