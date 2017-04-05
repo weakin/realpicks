@@ -29,13 +29,20 @@ class TeamSchedules extends React.Component {
   /*
   ** The hashChangeListener function works on the same idea in each component it's placed in.
   ** It listens for changes to location.hash and updates the component state accordingly. On initial load of the
-  ** component, the componentDidMount calls the data fetching function and  If a user is navigating
-  ** within the component, each time a new data request comes back from the server (for GameWeek, Picks, Rankings,
-  ** or TeamSchedules) it pushes the relevant data into a object on the component state and records that that data
-  ** has been requested. While still in the same component if the user navigates away and then requests data that has
-  ** already been viewed, the hashChangeListener sees that the data is already on the data storage object state
+  ** component, the componentDidMount calls the data fetching function. If a user is navigating
+  ** within the component, each time a new data request comes back from the server it pushes the relevant
+  ** data into a object on the component state that stores the data, and then updates an array on the
+  ** component state that records that that specific data has been requested, and is in the data storage object.
+  ** While still in the same component if the user requests data that has already been viewed,
+  ** the hashChangeListener sees that the data is already on the data storage object on state
   ** and calls setState with the correct data. This prevents multiple API requests for the same data.
-  ** If the data hasn't been requested yet, it calls the function that fetches it.
+  ** If the data hasn't been requested yet, it calls the data fetching function.
+  **
+  ** As this function is found in four components (GameWeek, Picks, Rankings, and TeamSchedule) with just slight
+  ** variations, it should be abstracted and moved up to the top level component. For now though, for each component
+  ** the function is in it gets bound to the window by window.addEventListener when the component mounts and
+  ** unbound when the component unmounts. If the window event listener wasn't removed when the component unmounted
+  ** there could be four event listerners calling the same function each time the location.hash changed.
   */
   hashChangeListener () {
     let teamNameRegEx = /teams\/([\w|\s]+)\W/
