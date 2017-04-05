@@ -35,7 +35,7 @@ class Game extends React.Component {
           let homeTeamConference = <input type='hidden' name='home_team_conference' value={game.home_team_conference.trim()} />
           let awayTeamConference = <input type='hidden' name='away_team_conference' value={game.away_team_conference.trim()} />
           let gameId = <input type='hidden' name='id' value={game.id} />
-          return <form onSubmit={() => this.adminSubmit(event, game.id)} className='adminForm' id={game.id}>{this.renderGame(game)}{gameWeek} {homeTeam} {awayTeam} {homeTeamDivision} {awayTeamDivision} {homeTeamConference} {awayTeamConference} {gameId}<span className='holder'></span></form>
+          return <form onSubmit={() => this.adminSubmit(event, game.id)} className='adminForm' id={game.id}>{this.renderGame(game)}{gameWeek} {homeTeam} {awayTeam} {homeTeamDivision} {awayTeamDivision} {homeTeamConference} {awayTeamConference} {gameId}<span className='holder' /></form>
         }, this)}
       </div>
     } else {
