@@ -56,10 +56,10 @@ class GameWeek extends React.Component {
       // the requested data has not been viewed, there is no integer from location.hash, and as there are no other weeks in memory, display the current week
       this.fetchWeekInfo(this.state.current_week)
     } else if (this.state.viewedWeeks.indexOf(this.state.current_week) > -1 && foundGameWeekInt === null) {
-      // the requested data has already been viewed, is the current week, and there is no week integer coming in from location.hash, so update the state from the stored data 
+      // the requested data has already been viewed, is the current week, and there is no week integer coming in from location.hash, so update the state from the stored data
       this.setState(this.state.viewedWeekObjects[this.state.current_week])
     } else if (this.state.viewedWeeks.indexOf(foundGameWeekInt) > -1) {
-      // the requested data has already been viewed and is stored, so update the state from the stored data 
+      // the requested data has already been viewed and is stored, so update the state from the stored data
       this.setState(this.state.viewedWeekObjects[foundGameWeekInt])
     }
   }
