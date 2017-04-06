@@ -2,6 +2,7 @@ import React from 'react'
 import ajax from 'superagent'
 
 import Game from './Game'
+import scrollToTop from '../assets/js/scrollToTop'
 
 class TeamSchedules extends React.Component {
   constructor (props) {
@@ -10,7 +11,6 @@ class TeamSchedules extends React.Component {
     this.state = { schedule: [], team: '', viewedTeams: [], viewedTeamObjects: {} }
     this.fetchTeamInfo = this.fetchTeamInfo.bind(this)
     this.hashChangeListener = this.hashChangeListener.bind(this)
-    this.scrollToTop = this.scrollToTop.bind(this)
   }
 
   componentDidMount () {
@@ -20,10 +20,6 @@ class TeamSchedules extends React.Component {
 
   componentWillUnmount () {
     window.removeEventListener('hashchange', this.hashChangeListener, false)
-  }
-
-  componentDidUpdate () {
-    this.scrollToTop()
   }
 
   /*
@@ -54,6 +50,7 @@ class TeamSchedules extends React.Component {
     } else if (this.state.viewedTeamObjects.hasOwnProperty(foundTeamName) !== true && this.state.viewedTeams.indexOf(foundTeamName) === -1) {
       this.fetchTeamInfo(foundTeamName)
     }
+    scrollToTop()
   }
 
   fetchTeamInfo (team) {
@@ -74,18 +71,6 @@ class TeamSchedules extends React.Component {
         }
       }
     )
-    this.scrollToTop()
-  }
-
-  scrollToTop () {
-    let top = window.scrollY
-    if (top > 100 && top < 499) {
-      $('html,body').animate({scrollTop: 0}, 250)
-    } else if (top > 500 && top < 999) {
-      $('html,body').animate({scrollTop: 0}, 500)
-    } else if (top > 1000) {
-      $('html,body').animate({scrollTop: 0}, 750)
-    }
   }
 
   render () {
