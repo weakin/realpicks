@@ -249,7 +249,7 @@ class Game extends React.Component {
 
     if (game.away_team_conference.trim() === '' && this.props.caller === 'teamSchedule') {
       return <div key={game.id}>
-        <div className='weekHeader'>Week {game.game_week_alias}</div>
+        <div className='scheduleWeekHeader'><Link to={`/games/${game.game_week}`}>{game.game_week_alias}</Link></div>
         Bye Week
       </div>
     }
