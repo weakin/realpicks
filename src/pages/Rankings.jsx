@@ -22,31 +22,43 @@ class Rankings extends React.Component {
     window.removeEventListener('hashchange', this.hashChangeListener, false)
   }
 
+  /*
+  ** The hashChangeListener function works on the same idea in each component it's placed in.
+  ** It listens for changes to location.hash and updates the component state accordingly. On initial load of the
+  ** component, the componentDidMount calls the data fetching function. If a user is navigating
+  ** within the component, each time a new data request comes back from the server it pushes the relevant
+  ** data into a object on the component state that stores the data, and then updates an array on the
+  ** component state that records that that specific data has been requested, and is in the data storage object.
+  ** While still in the same component if the user requests data that has already been viewed,
+  ** the hashChangeListener sees that the data is already on the data storage object on state
+  ** and calls setState with the correct data. This prevents multiple API requests for the same data.
+  ** If the data hasn't been requested yet, it calls the data fetching function.
+  **
+  ** As this function is found in four components (GameWeek, Picks, Rankings, and TeamSchedule) with just slight
+  ** variations, it should be abstracted and moved up to the top level component. For now though, for each component
+  ** the function is in it gets bound to the window by window.addEventListener when the component mounts and
+  ** unbound when the component unmounts. If the window event listener wasn't removed when the component unmounted
+  ** there could be four event listerners calling the same function each time the location.hash changed.
+  */
   hashChangeListener () {
-    console.log('Rankings.jsx - addEventListener') 
     let rankingRegEx = /rankings\/(\d{1,2})/
     let foundRankingWeek = document.URL.match(rankingRegEx)
     let foundRankingWeekInt = foundRankingWeek !== null ? Number(foundRankingWeek[1]) : null
     if (this.state.viewedRankings.indexOf(foundRankingWeekInt) === -1 && foundRankingWeekInt !== null && this.state.current_week !== (foundRankingWeekInt + 1)) {
       // the requested data has not been viewed, there is an integer from location.hash, and that int is not one less than the current week int
-      console.log('addEventListener - if block: 1')
       this.fetchRankingsInfo(foundRankingWeekInt)
     } else if (this.state.viewedRankings.indexOf(foundRankingWeekInt) === -1 && foundRankingWeekInt !== null && (this.state.current_week - 1) === foundRankingWeekInt) {
       // the requested data has not been viewed, there is an integer from location.hash, and that int is one less than the current week int
-      console.log('addEventListener - if block: 2')
       this.fetchRankingsInfo(foundRankingWeekInt)
     } else if (this.state.viewedRankings.indexOf(this.state.current_week) === -1 && foundRankingWeekInt === null && this.state.viewedRankings.length > 0) {
-      // this is an edge case where the user loaded the component with the initial state of the current week, views other weeks, then navigates away to 
+      // this is an edge case where the user loaded the component with the initial state of the current week, views other weeks, then navigates away to
       // another component, and then uses the browser back button to get back to the page of the initial component state.
       // the requested data has not been viewed, there is no integer from location.hash, and as there are no other weeks in memory, display the current week
-      console.log('addEventListener - if block: 3')
       this.fetchRankingsInfo(this.state.current_week)
     } else if (this.state.viewedRankings.indexOf(this.state.current_week) > -1 && foundRankingWeekInt === null) {
       // the requested data has already been viewed, is the current week, and there is no week integer coming in from location.hash, so update the state from the stored data
-      console.log('addEventListener - if block: 4')
       this.setState(this.state.viewedRankingsObjects[this.state.current_week])
     } else if (this.state.viewedRankings.indexOf(foundRankingWeekInt) > -1) {
-      console.log('addEventListener - if block: 5')
       // the requested data has already been viewed and is stored, so update the state from the stored data
       this.setState(this.state.viewedRankingsObjects[foundRankingWeekInt])
     }
@@ -65,7 +77,6 @@ class Rankings extends React.Component {
           let rankingsWeekInt = Number(response.body.requested_week)
           if (this.state.viewedRankings.indexOf(rankingsWeekInt) === -1) {
             this.state.viewedRankings.push(rankingsWeekInt)
-            console.log('fetchRankingsInfo - rankingsWeekInt: ' + String(rankingsWeekInt)) 
           }
 
           rankingsObject = {week: response.body.week, total: response.body.total, requestedWeek: response.body.requested_week, gameWeekAlias: response.body.game_week_alias, current_week: response.body.current_week}
