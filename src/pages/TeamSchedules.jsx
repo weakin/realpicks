@@ -41,14 +41,16 @@ class TeamSchedules extends React.Component {
   ** there could be four event listerners calling the same function each time the location.hash changed.
   */
   hashChangeListener () {
-    let teamNameRegEx = /teams\/([\w|\s]+)\W/
+    let teamNameRegEx = /teams\/([\w+|\x25|\s]+)\W/
+    let urlSpaceEncodingRegEx = /\x25\d{2}/g
     let foundTeamNameRegExGroup = document.URL.match(teamNameRegEx)
     let foundTeamName = foundTeamNameRegExGroup !== null ? String(foundTeamNameRegExGroup[1]) : null
     if (foundTeamName === null) { return }
-    if (this.state.viewedTeamObjects.hasOwnProperty(foundTeamName) === true) {
-      this.setState(this.state.viewedTeamObjects[foundTeamName])
-    } else if (this.state.viewedTeamObjects.hasOwnProperty(foundTeamName) !== true && this.state.viewedTeams.indexOf(foundTeamName) === -1) {
-      this.fetchTeamInfo(foundTeamName)
+    let cleanedTeamName =  foundTeamName.replace(urlSpaceEncodingRegEx, ' ')
+    if (this.state.viewedTeamObjects.hasOwnProperty(cleanedTeamName) === true) {
+      this.setState(this.state.viewedTeamObjects[cleanedTeamName])
+    } else if (this.state.viewedTeamObjects.hasOwnProperty(cleanedTeamName) !== true && this.state.viewedTeams.indexOf(cleanedTeamName) === -1) {
+      this.fetchTeamInfo(cleanedTeamName)
     }
     scrollToTop()
   }
