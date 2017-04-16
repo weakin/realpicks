@@ -119,6 +119,11 @@ class Game extends React.Component {
     .end((err, res) => {
       console.log(res.text)
     })
+    /*
+    ** The user stats table doesn't get updated if the game is a tie
+    ** game, which is why the check for winningTeam being undefined
+    ** is there. If the game was a tie game, winningTeam === undefined.
+    */
     if (winningTeam !== undefined) {
       ajax.get('assets/php/update_user_stats.php')
       .query({ id: gameID, winning_team: winningTeam })
