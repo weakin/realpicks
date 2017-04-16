@@ -38,28 +38,46 @@ body {
 
 .picks {
   text-align: center;
+  padding-top: 10px;
 }
 
-.picks .headerRow {
+.picks .headerRow, .picks .headerRowNarrow {
     text-align: center;
     position: fixed;
     width: 100%;
-    top: 50px;
+    top: 55px;
     left: 0;
     z-index: 100;
-    background-color: #e7f5f7; 
+    background-color: #e7f5f7;
     opacity: 0.9;
     filter: alpha(opacity=90);
 }
 
-.picks .headerRow span {
+.picks .headerRow span, .picks .headerRowNarrow span {
   display: inline-block;
-  margin: 8px 0px 8px 0px;
+  margin: 5px 0px 5px 0px;
   width: 105px;
 }
 
-.picks .headerRow span.nav {
+.headerRowNarrow span.header {
+  vertical-align: middle;
+}
+
+.headerRowNarrow span.header.nav a {
+  vertical-align: 50%;
+}
+
+.picks .headerRowNarrow span span.navNarrow {
+  margin: 0px 0px 0px 0px;
+}
+
+.picks .headerRow span.nav, .picks .headerRowNarrow span.nav {
   width: 230px;
+  margin-right: 20px;
+}
+
+.picks .headerRow.noPicks span.nav {
+  width: 330px;
   margin-right: 20px;
 }
 
@@ -95,8 +113,12 @@ table.standings .teamRow td, table.standings .headerRow td {
     text-align: center;
 }
 
-table.standings  .teamRow td.teamName,  table.standings .headerRow td.teamName {
-    width: 200px;
+table.standings .teamRow td.wins1, table.standings .teamRow td.home_wins1, table.standings .teamRow td.away_wins1, table.standings .teamRow td.division_wins1, table.standings .headerRow td.record, table.standings .headerRow td.homeRecord, table.standings .headerRow td.awayRecord, table.standings .headerRow td.divisionRecord {
+  width: 70px;
+}
+
+table.standings .teamRow td.teamName, table.standings .headerRow td.teamName {
+    width: 180px;
     text-align: left;
 }
 
@@ -112,22 +134,30 @@ tr:nth-child(odd) .wins1.wins, tr:nth-child(odd) .home_wins1.home_wins, tr:nth-c
     background-color: #dbffdc;
 }
 
-div.weekHeader {
+div.weekHeader, div.weekHeaderNarrow {
     display: inline-block;
-    padding: 0px 10px 0px 10px;
+    padding: 0px 5px 0px 5px;
     font-weight: bold;
 }
 
-span.back, span.forward {
+div.weekHeaderNarrow {
+  width: 150px;
+}
+
+span.arrow, span.arrowNarrow {
     display: inline-block;
-    padding: 0px 10px 0px 10px;
+    padding: 0px 5px 0px 5px;
     text-align: center;
-    width: 50px;
+    width: 40px;
+}
+
+span.arrowNarrow {
+  vertical-align: 50%;
 }
 
 div.teamSchedule, div.gameWeek {
     margin: 0 auto;
-    width: 400px;
+    width: 300px;
     text-align: center;
 }
 
@@ -222,7 +252,7 @@ button.adminSubmit {
 /* For the 'Picks' page */
 
 div.gameRow {
-    margin-top: 20px;
+    padding: 20px 0px 20px 0px;
     text-align: center;
 }
 
@@ -238,10 +268,13 @@ div.gameRow img {
 
 div.gameRow span.game {
     margin-right: 20px;
+    border-bottom: 2px solid #9ed7ff;
 }
 
-div.gameRow span.name {
-    display: none;
+span.pick span.name {
+    display: block;
+    text-align: center;
+    padding: 0px 0px 0px 0px
 }
 
 div.gameRow span.winner {
@@ -259,6 +292,10 @@ p.rankings {
   width: 300px;
 }
 
+div.weekWrapper {
+  margin: 8px 0px 0px 0px;
+}
+
 div span.totalHeader, div span.weekHeader {
     display: inline-block;
     width: 100%;
@@ -270,7 +307,7 @@ div span.totalHeader, div span.weekHeader {
 div.total span, div.week span {
     display: inline-block;
     width: 130px;
-    margin: 0px;
+    margin: 4px 0px 0px 0px;
 }
 
 div span.score {
@@ -297,3 +334,65 @@ div.dayAndDateHeader {
 div.teams {
   text-align: center;
 }
+
+@media only screen and (max-width: 991px) {
+  .average_points_surrendered_per_game1, .average_points_scored_per_game1, .average_points_surr, .average_points  {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .total_points, .total_points_scored1, .total_points_surr, .total_points_surrendered1 {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 630px) {
+  .divisionRecord, .division_wins1 {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 560px) {
+  .homeRecord, .awayRecord, .home_wins1, .away_wins1 {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 375px) {
+  td.streak, td.streak1 {
+    display: none;
+  }
+
+  td.wins1.streak {
+    display: table-cell;
+  }
+
+  body {
+    padding: 100px 0px 0px 0px;
+  }
+
+  .picks .headerRow, .picks .headerRowNarrow {
+    top: 82px;
+  }
+
+  .headerAndNav div.true {
+     width: 300px;
+     margin: 0 auto;
+  }
+
+  div.true ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+  }
+
+  div.true ul li {
+    display: inline-block;
+    width: 100px;
+  }
+}
+
