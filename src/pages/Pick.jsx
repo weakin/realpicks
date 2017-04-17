@@ -16,7 +16,7 @@ class Pick extends React.Component {
     let forwardArrow = ''
     let requestedWeek = Number(requestedWeekArg)
     let currentWeek = Number(currentWeekArg)
-    console.log('gameWeekAlias length: ' + String(gameWeekAlias.length))
+    gameWeekAlias = gameWeekAlias.length < 20 ? gameWeekAlias : <span className='navNarrow'>{gameWeekAlias}</span>
     backArrow = requestedWeek <= currentWeek && currentWeek >= 2 && requestedWeek >= 2 ? <Link to={`/picks/${Number(requestedWeek) - 1}`}>&lt;&lt;</Link> : ''
     forwardArrow = currentWeek <= 21 && requestedWeek < currentWeek ? <Link to={`/picks/${Number(requestedWeek) + 1}`}>&gt;&gt;</Link> : ''
     return <span className='header nav' key={key}>{backArrow} {gameWeekAlias} {forwardArrow}</span>
@@ -77,18 +77,9 @@ class Pick extends React.Component {
 
   render () {
     if (this.props.caller === 'header') {
-      if (this.props.headerArray.length === 0) {
-        return <div className='headerRow noPicks'>{this.buildHeaderRowNav(0, this.props.requestedWeek, this.props.currentWeek, this.props.gameWeekAlias)}</div>
-      }
-      let headers = []
-      for (let i = 0; i < this.props.headerArray.length; i++) {
-        if (i === 0) {
-          headers.push(this.buildHeaderRowNav(i, this.props.requestedWeek, this.props.currentWeek, this.props.gameWeekAlias))
-        } else {
-          headers.push(<span className='header' key={i}>{this.props.headerArray[i]}</span>)
-        }
-      }
-      return <div className='headerRow'>{headers}</div>
+      let header = this.buildHeaderRowNav(1, this.props.requestedWeek, this.props.currentWeek, this.props.gameWeekAlias)
+      let headerRowClass = this.props.gameWeekAlias.length < 20 ? 'headerRow ' + this.props.additionalClass : 'headerRowNarrow ' + this.props.additionalClass
+      return <div className={headerRowClass}>{header}</div>
     } else {
       return <div className='gameRow'>{this.buildPicksRow(this.props.picks)}</div>
     }
