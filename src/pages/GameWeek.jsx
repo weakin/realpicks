@@ -90,12 +90,14 @@ class GameWeek extends React.Component {
   }
 
   render () {
-    let backLink = this.state.back !== undefined && this.state.back >= 1 ? <span className='back'><Link to={`/games/${this.state.back}`} >&lt;&lt;</Link></span> : <span className='back'>{String.fromCharCode(160)}</span>
-    let forwardLink = this.state.forward !== undefined && this.state.forward <= 21 && this.state.forward !== '' ? <span className='forward'><Link to={`/games/${this.state.forward}`} >&gt;&gt;</Link></span> : <span className='forward'>{String.fromCharCode(160)}</span>
+    let weekHeaderClass = this.state.game_week_alias.length < 20 ? 'weekHeader' : 'weekHeaderNarrow'
+    let linkClass = this.state.game_week_alias.length < 20 ? 'arrow' : 'arrowNarrow'
+    let backLink = this.state.back !== undefined && this.state.back >= 1 ? <span className={linkClass}><Link to={`/games/${this.state.back}`} >&lt;&lt;</Link></span> : <span className={linkClass}>{String.fromCharCode(160)}</span>
+    let forwardLink = this.state.forward !== undefined && this.state.forward <= 21 && this.state.forward !== '' ? <span className={linkClass}><Link to={`/games/${this.state.forward}`} >&gt;&gt;</Link></span> : <span className={linkClass}>{String.fromCharCode(160)}</span>
     return (
       <div className='gameWeek'>
         {backLink}
-        <Header caller='gameWeek' class='weekHeader' key={this.state.game_week} text={this.state.game_week_alias} />
+        <Header caller='gameWeek' class={weekHeaderClass} key={this.state.game_week} text={this.state.game_week_alias} />
         {forwardLink}
         <Game caller='gameWeek' games={this.state.schedule} gameWeek={this.state.game_week} currentWeek={this.state.current_week} parentProps={this.props} />
       </div>
