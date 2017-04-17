@@ -110,12 +110,14 @@ class Picks extends React.Component {
   }
 
   render () {
-    let boo = []
+    let pick = []
     let keysArr = []
     let firstKey = 0
     let keys = []
     let allPicks = ''
     let headerText = this.state.gameWeekAlias
+    let additionalClass = ''
+
     if (this.state.picks !== undefined && this.state.picks !== null) {
       keysArr = Object.keys(this.state.picks)
       firstKey = keysArr[0]
@@ -123,9 +125,10 @@ class Picks extends React.Component {
         keys = this.renderGamePicks(this.state.picks[firstKey])
       }
     }
+
     if (this.state.picks !== undefined && this.state.picks !== null && keys.length >= 2) {
       for (let prop in this.state.picks) {
-        boo.push(keys.map((key) => {
+        pick.push(keys.map((key) => {
           if (key === 'game') {
             return [key, this.state.picks[prop][key]]
           }
@@ -134,18 +137,19 @@ class Picks extends React.Component {
       }
     }
 
-    if (boo.length === 0) {
+    if (pick.length === 0) {
       // if no user has made picks for this week, set the headerText to tell the user that, and set allPicks to an empty string
       headerText = 'No user has made Picks for this week!'
+      additionalClass = 'noPicks'
       allPicks = ''
     } else {
-      allPicks = boo.map((b, i) => {
+      allPicks = pick.map((b, i) => {
         return <Pick caller='picksRow' picks={b} key={'pick' + String(i)} />
       })
     }
 
     return <div className='picks'>
-      <Pick caller='header' headerArray={keys} requestedWeek={this.state.requestedWeek} currentWeek={this.state.current_week} gameWeekAlias={headerText} />
+      <Pick caller='header' additionalClass={additionalClass} requestedWeek={this.state.requestedWeek} currentWeek={this.state.current_week} gameWeekAlias={headerText} />
       {allPicks}
     </div>
   }
