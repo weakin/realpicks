@@ -1,0 +1,8 @@
+node_modules/
+coverage/
+dist/
+reset.sql
+*.swp
+npm-debug.log
+.DS_Store
+src/assets/php/recount.php
